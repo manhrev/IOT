@@ -13,6 +13,11 @@ import (
 	"github.com/mochi-co/mqtt/v2/packets"
 )
 
+type Payload struct {
+	Value int
+	// CreatedAt time.Time
+}
+
 func main() {
 	sigs := make(chan os.Signal, 1)
 	done := make(chan bool, 1)
@@ -100,6 +105,7 @@ func (h *ExampleHook) OnDisconnect(cl *mqtt.Client, err error, expire bool) {
 
 func (h *ExampleHook) OnSubscribed(cl *mqtt.Client, pk packets.Packet, reasonCodes []byte) {
 	h.Log.Info().Str("client", cl.ID).Interface("filters", pk.Filters).Msgf("subscribed qos=%v", reasonCodes)
+
 }
 
 func (h *ExampleHook) OnUnsubscribed(cl *mqtt.Client, pk packets.Packet) {
@@ -110,10 +116,6 @@ func (h *ExampleHook) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.Pac
 	h.Log.Info().Str("client", cl.ID).Str("payload", string(pk.Payload)).Msg("received from client")
 
 	pkx := pk
-	if string(pk.Payload) == "hello" {
-		pkx.Payload = []byte("hello world")
-		h.Log.Info().Str("client", cl.ID).Str("payload", string(pkx.Payload)).Msg("received modified packet from client")
-	}
 
 	return pkx, nil
 }
