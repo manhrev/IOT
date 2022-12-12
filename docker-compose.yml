@@ -1,6 +1,14 @@
 version: '3.7'
 
 services:
+  broker:
+    build:
+      context: backend
+      dockerfile: build/Dockerfile
+    container_name: broker
+    ports:
+      - 1883:1883
+
   server:
     build:
       context: server
@@ -18,6 +26,6 @@ services:
       MYSQL_DATABASE: info
     container_name: 'db-info'
     volumes:
-      - "./tmp/db/auth:/var/lib/mysql"
+      - "./tmp/db/info:/var/lib/mysql"
     ports:
       - 33306:3306

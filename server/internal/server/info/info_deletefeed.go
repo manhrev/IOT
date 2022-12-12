@@ -11,5 +11,9 @@ func (s *infoServer) DeleteFeed(ctx context.Context, request *info_pb.DeleteFeed
 	if err != nil {
 		return nil, err
 	}
+	// Unscribe
+	if token := s.mqttClient.Unsubscribe(request.GetFeedName()); token.Wait() && token.Error() != nil {
+		return nil, token.Error()
+	}
 	return &info_pb.DeleteFeedReply{}, nil
 }
