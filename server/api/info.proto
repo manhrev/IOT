@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package info;
+
+option go_package = "github.com/manhrev/IOT/server/pkg/api;info";
+
+import "google/protobuf/timestamp.proto";
+
+service Info {
+    // Feed
+    rpc CreateFeed(CreateFeedRequest) returns (CreateFeedReply);
+    rpc GetFeed(GetFeedRequest) returns (GetFeedReply);
+    rpc ListFeed(ListFeedRequest) returns (ListFeedReply);
+    rpc DeleteFeed(DeleteFeedRequest) returns (DeleteFeedReply);
+
+    // Data
+    rpc CreateData(CreateDataRequest) returns (CreateDataReply);
+    rpc ListData(ListDataRequest) returns (ListDataReply);
+}
+
+message CreateFeedRequest {
+    string feed_name = 2;
+}
+
+message CreateFeedReply {}
+
+message FeedInfo {
+    int64 feed_id = 1;
+    string feed_name = 2;
+    google.protobuf.Timestamp created_at = 3;
+}
+
+message GetFeedRequest {
+    string feed_name = 1;
+}
+
+message GetFeedReply {
+    FeedInfo info = 1;
+}
+
+message ListFeedRequest {}
+
+message ListFeedReply {
+    repeated FeedInfo feeds = 1;
+}
+
+message DeleteFeedRequest {
+    string feed_name = 1;
+}
+
+message DeleteFeedReply {}
+
+message CreateDataRequest {
+    string feed_name = 1;
+    int64 value = 2;
+    google.protobuf.Timestamp recorded_at = 3;
+}
+
+message CreateDataReply {}
+
+message ListDataRequest {
+    string feed_name = 1;
+}
+
+message Data {
+    int64 value = 1;
+    google.protobuf.Timestamp recorded_at = 3;
+}
+
+message ListDataReply {
+    repeated Data list_data = 1;
+}

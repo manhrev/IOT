@@ -100,6 +100,7 @@ func (h *ExampleHook) OnDisconnect(cl *mqtt.Client, err error, expire bool) {
 
 func (h *ExampleHook) OnSubscribed(cl *mqtt.Client, pk packets.Packet, reasonCodes []byte) {
 	h.Log.Info().Str("client", cl.ID).Interface("filters", pk.Filters).Msgf("subscribed qos=%v", reasonCodes)
+
 }
 
 func (h *ExampleHook) OnUnsubscribed(cl *mqtt.Client, pk packets.Packet) {
@@ -114,7 +115,6 @@ func (h *ExampleHook) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.Pac
 		pkx.Payload = []byte("hello world")
 		h.Log.Info().Str("client", cl.ID).Str("payload", string(pkx.Payload)).Msg("received modified packet from client")
 	}
-
 	return pkx, nil
 }
 
