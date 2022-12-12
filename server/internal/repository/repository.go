@@ -17,6 +17,6 @@ func New(entClient *ent.Client) *Repository {
 	return &Repository{
 		entClient: entClient,
 		Feed:      feed.New(entClient),
-		Data:      feed.New(entClient),
+		Data:      data.New(entClient),
 	}
 }

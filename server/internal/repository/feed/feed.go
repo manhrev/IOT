@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/manhrev/IOT/server/pkg/ent"
+	"github.com/manhrev/IOT/server/pkg/ent/data"
 	"github.com/manhrev/IOT/server/pkg/ent/feed"
 )
 
@@ -43,7 +44,7 @@ func (f *feedImpl) Get(ctx context.Context, feedName string) (*ent.Feed, error) 
 }
 
 func (f *feedImpl) List(ctx context.Context) ([]*ent.Feed, error) {
-	feedList, err := f.entClient.Feed.Query().All(ctx)
+	feedList, err := f.entClient.Feed.Query().Order(ent.Desc(feed.FieldCreatedAt)).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -51,6 +52,11 @@ func (f *feedImpl) List(ctx context.Context) ([]*ent.Feed, error) {
 }
 
 func (f *feedImpl) Delete(ctx context.Context, feedName string) error {
+	_, err := f.entClient.Data.Delete().Where(data.HasFeedWith(feed.FeedNameEQ(feedName))).Exec(ctx)
+	if err != nil {
+		return err
+	}
+
 	num_deleted, err := f.entClient.Feed.Delete().Where(feed.FeedNameEQ(feedName)).Exec(ctx)
 	if err != nil {
 		return err
