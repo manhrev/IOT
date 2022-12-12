@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/manhrev/IOT/server/pkg/ent/data"
+	"github.com/manhrev/IOT/server/pkg/ent/feed"
 	"github.com/manhrev/IOT/server/pkg/ent/schema"
 )
 
@@ -19,4 +20,10 @@ func init() {
 	dataDescRecordedAt := dataFields[1].Descriptor()
 	// data.DefaultRecordedAt holds the default value on creation for the recorded_at field.
 	data.DefaultRecordedAt = dataDescRecordedAt.Default.(time.Time)
+	feedFields := schema.Feed{}.Fields()
+	_ = feedFields
+	// feedDescCreatedAt is the schema descriptor for created_at field.
+	feedDescCreatedAt := feedFields[1].Descriptor()
+	// feed.DefaultCreatedAt holds the default value on creation for the created_at field.
+	feed.DefaultCreatedAt = feedDescCreatedAt.Default.(time.Time)
 }

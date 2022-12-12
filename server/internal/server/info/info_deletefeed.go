@@ -7,5 +7,9 @@ import (
 )
 
 func (s *infoServer) DeleteFeed(ctx context.Context, request *info_pb.DeleteFeedRequest) (*info_pb.DeleteFeedReply, error) {
+	err := s.repository.Feed.Delete(ctx, request.GetFeedName())
+	if err != nil {
+		return nil, err
+	}
 	return &info_pb.DeleteFeedReply{}, nil
 }

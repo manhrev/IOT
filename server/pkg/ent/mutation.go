@@ -504,6 +504,7 @@ type FeedMutation struct {
 	typ           string
 	id            *int
 	feed_name     *string
+	created_at    *time.Time
 	clearedFields map[string]struct{}
 	data          map[int]struct{}
 	removeddata   map[int]struct{}
@@ -647,6 +648,42 @@ func (m *FeedMutation) ResetFeedName() {
 	m.feed_name = nil
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (m *FeedMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *FeedMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Feed entity.
+// If the Feed object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FeedMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *FeedMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
 // AddDatumIDs adds the "data" edge to the Data entity by ids.
 func (m *FeedMutation) AddDatumIDs(ids ...int) {
 	if m.data == nil {
@@ -720,9 +757,12 @@ func (m *FeedMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *FeedMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 2)
 	if m.feed_name != nil {
 		fields = append(fields, feed.FieldFeedName)
+	}
+	if m.created_at != nil {
+		fields = append(fields, feed.FieldCreatedAt)
 	}
 	return fields
 }
@@ -734,6 +774,8 @@ func (m *FeedMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case feed.FieldFeedName:
 		return m.FeedName()
+	case feed.FieldCreatedAt:
+		return m.CreatedAt()
 	}
 	return nil, false
 }
@@ -745,6 +787,8 @@ func (m *FeedMutation) OldField(ctx context.Context, name string) (ent.Value, er
 	switch name {
 	case feed.FieldFeedName:
 		return m.OldFeedName(ctx)
+	case feed.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
 	}
 	return nil, fmt.Errorf("unknown Feed field %s", name)
 }
@@ -760,6 +804,13 @@ func (m *FeedMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetFeedName(v)
+		return nil
+	case feed.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Feed field %s", name)
@@ -812,6 +863,9 @@ func (m *FeedMutation) ResetField(name string) error {
 	switch name {
 	case feed.FieldFeedName:
 		m.ResetFeedName()
+		return nil
+	case feed.FieldCreatedAt:
+		m.ResetCreatedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown Feed field %s", name)

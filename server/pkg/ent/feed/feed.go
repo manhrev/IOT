@@ -2,6 +2,10 @@
 
 package feed
 
+import (
+	"time"
+)
+
 const (
 	// Label holds the string label denoting the feed type in the database.
 	Label = "feed"
@@ -9,6 +13,8 @@ const (
 	FieldID = "id"
 	// FieldFeedName holds the string denoting the feed_name field in the database.
 	FieldFeedName = "feed_name"
+	// FieldCreatedAt holds the string denoting the created_at field in the database.
+	FieldCreatedAt = "created_at"
 	// EdgeData holds the string denoting the data edge name in mutations.
 	EdgeData = "data"
 	// Table holds the table name of the feed in the database.
@@ -26,6 +32,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldFeedName,
+	FieldCreatedAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -37,3 +44,8 @@ func ValidColumn(column string) bool {
 	}
 	return false
 }
+
+var (
+	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
+	DefaultCreatedAt time.Time
+)

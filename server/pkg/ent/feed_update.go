@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -31,6 +32,20 @@ func (fu *FeedUpdate) Where(ps ...predicate.Feed) *FeedUpdate {
 // SetFeedName sets the "feed_name" field.
 func (fu *FeedUpdate) SetFeedName(s string) *FeedUpdate {
 	fu.mutation.SetFeedName(s)
+	return fu
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (fu *FeedUpdate) SetCreatedAt(t time.Time) *FeedUpdate {
+	fu.mutation.SetCreatedAt(t)
+	return fu
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (fu *FeedUpdate) SetNillableCreatedAt(t *time.Time) *FeedUpdate {
+	if t != nil {
+		fu.SetCreatedAt(*t)
+	}
 	return fu
 }
 
@@ -150,6 +165,9 @@ func (fu *FeedUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := fu.mutation.FeedName(); ok {
 		_spec.SetField(feed.FieldFeedName, field.TypeString, value)
 	}
+	if value, ok := fu.mutation.CreatedAt(); ok {
+		_spec.SetField(feed.FieldCreatedAt, field.TypeTime, value)
+	}
 	if fu.mutation.DataCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -226,6 +244,20 @@ type FeedUpdateOne struct {
 // SetFeedName sets the "feed_name" field.
 func (fuo *FeedUpdateOne) SetFeedName(s string) *FeedUpdateOne {
 	fuo.mutation.SetFeedName(s)
+	return fuo
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (fuo *FeedUpdateOne) SetCreatedAt(t time.Time) *FeedUpdateOne {
+	fuo.mutation.SetCreatedAt(t)
+	return fuo
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (fuo *FeedUpdateOne) SetNillableCreatedAt(t *time.Time) *FeedUpdateOne {
+	if t != nil {
+		fuo.SetCreatedAt(*t)
+	}
 	return fuo
 }
 
@@ -374,6 +406,9 @@ func (fuo *FeedUpdateOne) sqlSave(ctx context.Context) (_node *Feed, err error) 
 	}
 	if value, ok := fuo.mutation.FeedName(); ok {
 		_spec.SetField(feed.FieldFeedName, field.TypeString, value)
+	}
+	if value, ok := fuo.mutation.CreatedAt(); ok {
+		_spec.SetField(feed.FieldCreatedAt, field.TypeTime, value)
 	}
 	if fuo.mutation.DataCleared() {
 		edge := &sqlgraph.EdgeSpec{

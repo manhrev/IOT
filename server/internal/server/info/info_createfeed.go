@@ -7,5 +7,9 @@ import (
 )
 
 func (s *infoServer) CreateFeed(ctx context.Context, request *info_pb.CreateFeedRequest) (*info_pb.CreateFeedReply, error) {
+	err := s.repository.Feed.Create(ctx, request.GetFeedName())
+	if err != nil {
+		return nil, err
+	}
 	return &info_pb.CreateFeedReply{}, nil
 }

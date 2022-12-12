@@ -5,6 +5,7 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/manhrev/IOT/server/pkg/ent/feed"
@@ -17,6 +18,8 @@ type Feed struct {
 	ID int `json:"id,omitempty"`
 	// FeedName holds the value of the "feed_name" field.
 	FeedName string `json:"feed_name,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FeedQuery when eager-loading is set.
 	Edges FeedEdges `json:"edges"`
@@ -49,6 +52,8 @@ func (*Feed) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case feed.FieldFeedName:
 			values[i] = new(sql.NullString)
+		case feed.FieldCreatedAt:
+			values[i] = new(sql.NullTime)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Feed", columns[i])
 		}
@@ -75,6 +80,12 @@ func (f *Feed) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field feed_name", values[i])
 			} else if value.Valid {
 				f.FeedName = value.String
+			}
+		case feed.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				f.CreatedAt = value.Time
 			}
 		}
 	}
@@ -111,6 +122,9 @@ func (f *Feed) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", f.ID))
 	builder.WriteString("feed_name=")
 	builder.WriteString(f.FeedName)
+	builder.WriteString(", ")
+	builder.WriteString("created_at=")
+	builder.WriteString(f.CreatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }
