@@ -5,7 +5,7 @@ import sys
 import json
 
 
-FEED_IDS = ["led-1", "led-2" ]
+FEED_IDS = ["led-1", "led-2", "pump-1", "pump-2"]
 isMicrobitConnected = False
 
 def connected(client, userdata, flags, rc):
@@ -75,14 +75,14 @@ def processData(data):
     pubData = json.dumps(myData) # format before publish
 
     try:
-        if splitData[1] == "HUMI1":
-            client.publish("humi-1", pubData)
-        elif splitData[1] == "TEMP1":
-            client.publish("temp-1", pubData)
-        elif splitData[1] == "HUMI2":
-            client.publish("humi-2", pubData)
-        elif splitData[1] == "TEMP2":
-            client.publish("temp-2", pubData)
+        if splitData[1] == "GRHUMI1":
+            client.publish("grhumi-1", pubData)
+        elif splitData[1] == "LIGHT1":
+            client.publish("light-1", pubData)
+        elif splitData[1] == "GRHUMI2":
+            client.publish("grhumi-2", pubData)
+        elif splitData[1] == "LIGHT2":
+            client.publish("light-2", pubData)
 
     except:
         pass
@@ -103,7 +103,7 @@ def readSerial():
                 mess = mess[end+1:]
 
 while True:
-    if isMicrobitConnectedisMicrobitConnected:
+    if isMicrobitConnected:
         readSerial()
 
     time.sleep(1)
