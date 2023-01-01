@@ -22,9 +22,14 @@ type MqttServer struct {
 	repository *repository.Repository
 }
 
+const (
+	USERNAME = "admin"
+	PASSWORD = "admin"
+)
+
 func New(host, port, clientID string, entClient *ent.Client) *MqttServer {
 	broker := fmt.Sprintf("tcp://%s:%s", host, port)
-	opts := mqtt.NewClientOptions().AddBroker(broker).SetClientID("server_client")
+	opts := mqtt.NewClientOptions().AddBroker(broker).SetClientID("server_client").SetUsername(USERNAME).SetPassword(PASSWORD)
 
 	repo := repository.New(entClient)
 
