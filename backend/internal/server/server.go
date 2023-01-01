@@ -31,7 +31,12 @@ func Serve(server *mqtt.Server) {
 		done <- true
 	}()
 
-	err := server.AddHook(new(auth.AllowHook), nil)
+	err := server.AddHook(new(auth.Hook), &auth.Options{
+		Ledger: &auth.Ledger{
+			Auth: auth.AuthRules{
+				{Username: "admin", Password: "admin", Allow: true},
+			}},
+	})
 	if err != nil {
 		log.Fatalf("error adding auth hook: %v", err)
 	}
