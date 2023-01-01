@@ -1,6 +1,33 @@
 version: "3.7"
 
 services:
+  auth:
+    build:
+      context: auth
+      dockerfile: build/Dockerfile
+    container_name: auth1
+    volumes:
+      - ./backend/auth:/app
+    depends_on:
+      - auth_db
+      - redis
+
+  auth_db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password@1
+      MYSQL_DATABASE: auth
+    container_name: "db-auth1"
+    volumes:
+      - "./tmp/db/auth:/var/lib/mysql"
+
+  redis:
+    image: redis:latest
+    container_name: redis1
+    ports:
+      - "63791:6379"
+    restart: always
+
   envoy:
     build:
       context: envoy
