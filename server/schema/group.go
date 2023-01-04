@@ -8,20 +8,19 @@ import (
 	"entgo.io/ent/schema/field"
 )
 
-type Feed struct {
+type Group struct {
 	ent.Schema
 }
 
-func (Feed) Fields() []ent.Field {
+func (Group) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("feed_name").Unique(),
+		field.String("group_name").Unique(),
 		field.Time("created_at").Default(time.Now()),
 	}
 }
 
-func (Feed) Edges() []ent.Edge {
+func (Group) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("data", Data.Type),
-		edge.From("group", Group.Type).Ref("feeds"),
+		edge.To("feeds", Feed.Type),
 	}
 }

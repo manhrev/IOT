@@ -7,7 +7,13 @@ option go_package = "github.com/manhrev/IOT/server/pkg/api;info";
 import "google/protobuf/timestamp.proto";
 
 service Info {
+    // Group
+    rpc CreateGroup(CreateGroupRequest) returns (CreateGroupReply);
+    rpc ListGroup(ListGroupRequest) returns (ListGroupReply);
+    rpc DeleteGroup(DeleteGroupRequest) returns (DeleteGroupReply);
+
     // Feed
+    rpc AddFeedsToGroup(AddFeedsToGroupRequest) returns (AddFeedsToGroupReply);
     rpc CreateFeed(CreateFeedRequest) returns (CreateFeedReply);
     rpc GetFeed(GetFeedRequest) returns (GetFeedReply);
     rpc ListFeed(ListFeedRequest) returns (ListFeedReply);
@@ -17,6 +23,31 @@ service Info {
     rpc CreateData(CreateDataRequest) returns (CreateDataReply);
     rpc ListData(ListDataRequest) returns (ListDataReply);
 }
+
+message CreateGroupRequest {
+    string group_name = 1;
+}
+
+message CreateGroupReply {}
+
+message ListGroupRequest {}
+
+message ListGroupReply {
+    repeated GroupInfo info = 1;
+}
+
+message GroupInfo {
+    int64 group_id = 1;
+    string group_name = 2;
+    repeated string feed_list = 3;
+    google.protobuf.Timestamp created_at = 4;
+}
+
+message DeleteGroupRequest{
+    string group_name = 1;
+}
+
+message DeleteGroupReply {}
 
 message CreateFeedRequest {
     string feed_name = 2;
@@ -49,6 +80,13 @@ message DeleteFeedRequest {
 }
 
 message DeleteFeedReply {}
+
+message AddFeedsToGroupRequest {
+    string group_name = 1;
+    repeated string feed_names = 2;
+}
+
+message AddFeedsToGroupReply {}
 
 message CreateDataRequest {
     string feed_name = 1;

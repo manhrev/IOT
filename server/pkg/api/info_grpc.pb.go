@@ -22,7 +22,12 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type InfoClient interface {
+	// Group
+	CreateGroup(ctx context.Context, in *CreateGroupRequest, opts ...grpc.CallOption) (*CreateGroupReply, error)
+	ListGroup(ctx context.Context, in *ListGroupRequest, opts ...grpc.CallOption) (*ListGroupReply, error)
+	DeleteGroup(ctx context.Context, in *DeleteGroupRequest, opts ...grpc.CallOption) (*DeleteGroupReply, error)
 	// Feed
+	AddFeedsToGroup(ctx context.Context, in *AddFeedsToGroupRequest, opts ...grpc.CallOption) (*AddFeedsToGroupReply, error)
 	CreateFeed(ctx context.Context, in *CreateFeedRequest, opts ...grpc.CallOption) (*CreateFeedReply, error)
 	GetFeed(ctx context.Context, in *GetFeedRequest, opts ...grpc.CallOption) (*GetFeedReply, error)
 	ListFeed(ctx context.Context, in *ListFeedRequest, opts ...grpc.CallOption) (*ListFeedReply, error)
@@ -38,6 +43,42 @@ type infoClient struct {
 
 func NewInfoClient(cc grpc.ClientConnInterface) InfoClient {
 	return &infoClient{cc}
+}
+
+func (c *infoClient) CreateGroup(ctx context.Context, in *CreateGroupRequest, opts ...grpc.CallOption) (*CreateGroupReply, error) {
+	out := new(CreateGroupReply)
+	err := c.cc.Invoke(ctx, "/info.Info/CreateGroup", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *infoClient) ListGroup(ctx context.Context, in *ListGroupRequest, opts ...grpc.CallOption) (*ListGroupReply, error) {
+	out := new(ListGroupReply)
+	err := c.cc.Invoke(ctx, "/info.Info/ListGroup", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *infoClient) DeleteGroup(ctx context.Context, in *DeleteGroupRequest, opts ...grpc.CallOption) (*DeleteGroupReply, error) {
+	out := new(DeleteGroupReply)
+	err := c.cc.Invoke(ctx, "/info.Info/DeleteGroup", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *infoClient) AddFeedsToGroup(ctx context.Context, in *AddFeedsToGroupRequest, opts ...grpc.CallOption) (*AddFeedsToGroupReply, error) {
+	out := new(AddFeedsToGroupReply)
+	err := c.cc.Invoke(ctx, "/info.Info/AddFeedsToGroup", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *infoClient) CreateFeed(ctx context.Context, in *CreateFeedRequest, opts ...grpc.CallOption) (*CreateFeedReply, error) {
@@ -98,7 +139,12 @@ func (c *infoClient) ListData(ctx context.Context, in *ListDataRequest, opts ...
 // All implementations must embed UnimplementedInfoServer
 // for forward compatibility
 type InfoServer interface {
+	// Group
+	CreateGroup(context.Context, *CreateGroupRequest) (*CreateGroupReply, error)
+	ListGroup(context.Context, *ListGroupRequest) (*ListGroupReply, error)
+	DeleteGroup(context.Context, *DeleteGroupRequest) (*DeleteGroupReply, error)
 	// Feed
+	AddFeedsToGroup(context.Context, *AddFeedsToGroupRequest) (*AddFeedsToGroupReply, error)
 	CreateFeed(context.Context, *CreateFeedRequest) (*CreateFeedReply, error)
 	GetFeed(context.Context, *GetFeedRequest) (*GetFeedReply, error)
 	ListFeed(context.Context, *ListFeedRequest) (*ListFeedReply, error)
@@ -113,6 +159,18 @@ type InfoServer interface {
 type UnimplementedInfoServer struct {
 }
 
+func (UnimplementedInfoServer) CreateGroup(context.Context, *CreateGroupRequest) (*CreateGroupReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateGroup not implemented")
+}
+func (UnimplementedInfoServer) ListGroup(context.Context, *ListGroupRequest) (*ListGroupReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListGroup not implemented")
+}
+func (UnimplementedInfoServer) DeleteGroup(context.Context, *DeleteGroupRequest) (*DeleteGroupReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteGroup not implemented")
+}
+func (UnimplementedInfoServer) AddFeedsToGroup(context.Context, *AddFeedsToGroupRequest) (*AddFeedsToGroupReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddFeedsToGroup not implemented")
+}
 func (UnimplementedInfoServer) CreateFeed(context.Context, *CreateFeedRequest) (*CreateFeedReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateFeed not implemented")
 }
@@ -142,6 +200,78 @@ type UnsafeInfoServer interface {
 
 func RegisterInfoServer(s grpc.ServiceRegistrar, srv InfoServer) {
 	s.RegisterService(&Info_ServiceDesc, srv)
+}
+
+func _Info_CreateGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateGroupRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InfoServer).CreateGroup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/info.Info/CreateGroup",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InfoServer).CreateGroup(ctx, req.(*CreateGroupRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Info_ListGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListGroupRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InfoServer).ListGroup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/info.Info/ListGroup",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InfoServer).ListGroup(ctx, req.(*ListGroupRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Info_DeleteGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteGroupRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InfoServer).DeleteGroup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/info.Info/DeleteGroup",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InfoServer).DeleteGroup(ctx, req.(*DeleteGroupRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Info_AddFeedsToGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddFeedsToGroupRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InfoServer).AddFeedsToGroup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/info.Info/AddFeedsToGroup",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InfoServer).AddFeedsToGroup(ctx, req.(*AddFeedsToGroupRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Info_CreateFeed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -259,6 +389,22 @@ var Info_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "info.Info",
 	HandlerType: (*InfoServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CreateGroup",
+			Handler:    _Info_CreateGroup_Handler,
+		},
+		{
+			MethodName: "ListGroup",
+			Handler:    _Info_ListGroup_Handler,
+		},
+		{
+			MethodName: "DeleteGroup",
+			Handler:    _Info_DeleteGroup_Handler,
+		},
+		{
+			MethodName: "AddFeedsToGroup",
+			Handler:    _Info_AddFeedsToGroup_Handler,
+		},
 		{
 			MethodName: "CreateFeed",
 			Handler:    _Info_CreateFeed_Handler,
