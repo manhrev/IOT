@@ -14,9 +14,11 @@ func (s *infoServer) GetFeed(ctx context.Context, request *info_pb.GetFeedReques
 	}
 	return &info_pb.GetFeedReply{
 		Info: &info_pb.FeedInfo{
-			FeedId:    int64(feedInfo.ID),
-			FeedName:  feedInfo.FeedName,
-			CreatedAt: timestamppb.New(feedInfo.CreatedAt),
+			FeedId:      int64(feedInfo.ID),
+			FeedName:    feedInfo.FeedName,
+			CreatedAt:   timestamppb.New(feedInfo.CreatedAt),
+			DisplayType: info_pb.FeedDisplayType(feedInfo.DisplayType),
+			DataType:    info_pb.FeedDataType(feedInfo.DataType),
 		},
 	}, nil
 }

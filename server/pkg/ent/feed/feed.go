@@ -13,6 +13,10 @@ const (
 	FieldID = "id"
 	// FieldFeedName holds the string denoting the feed_name field in the database.
 	FieldFeedName = "feed_name"
+	// FieldDataType holds the string denoting the data_type field in the database.
+	FieldDataType = "data_type"
+	// FieldDisplayType holds the string denoting the display_type field in the database.
+	FieldDisplayType = "display_type"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// EdgeData holds the string denoting the data edge name in mutations.
@@ -39,6 +43,8 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldFeedName,
+	FieldDataType,
+	FieldDisplayType,
 	FieldCreatedAt,
 }
 
@@ -59,6 +65,10 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultDataType holds the default value on creation for the "data_type" field.
+	DefaultDataType uint16
+	// DefaultDisplayType holds the default value on creation for the "display_type" field.
+	DefaultDisplayType uint16
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt time.Time
 )

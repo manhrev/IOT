@@ -28,6 +28,34 @@ func (fc *FeedCreate) SetFeedName(s string) *FeedCreate {
 	return fc
 }
 
+// SetDataType sets the "data_type" field.
+func (fc *FeedCreate) SetDataType(u uint16) *FeedCreate {
+	fc.mutation.SetDataType(u)
+	return fc
+}
+
+// SetNillableDataType sets the "data_type" field if the given value is not nil.
+func (fc *FeedCreate) SetNillableDataType(u *uint16) *FeedCreate {
+	if u != nil {
+		fc.SetDataType(*u)
+	}
+	return fc
+}
+
+// SetDisplayType sets the "display_type" field.
+func (fc *FeedCreate) SetDisplayType(u uint16) *FeedCreate {
+	fc.mutation.SetDisplayType(u)
+	return fc
+}
+
+// SetNillableDisplayType sets the "display_type" field if the given value is not nil.
+func (fc *FeedCreate) SetNillableDisplayType(u *uint16) *FeedCreate {
+	if u != nil {
+		fc.SetDisplayType(*u)
+	}
+	return fc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (fc *FeedCreate) SetCreatedAt(t time.Time) *FeedCreate {
 	fc.mutation.SetCreatedAt(t)
@@ -143,6 +171,14 @@ func (fc *FeedCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (fc *FeedCreate) defaults() {
+	if _, ok := fc.mutation.DataType(); !ok {
+		v := feed.DefaultDataType
+		fc.mutation.SetDataType(v)
+	}
+	if _, ok := fc.mutation.DisplayType(); !ok {
+		v := feed.DefaultDisplayType
+		fc.mutation.SetDisplayType(v)
+	}
 	if _, ok := fc.mutation.CreatedAt(); !ok {
 		v := feed.DefaultCreatedAt
 		fc.mutation.SetCreatedAt(v)
@@ -153,6 +189,12 @@ func (fc *FeedCreate) defaults() {
 func (fc *FeedCreate) check() error {
 	if _, ok := fc.mutation.FeedName(); !ok {
 		return &ValidationError{Name: "feed_name", err: errors.New(`ent: missing required field "Feed.feed_name"`)}
+	}
+	if _, ok := fc.mutation.DataType(); !ok {
+		return &ValidationError{Name: "data_type", err: errors.New(`ent: missing required field "Feed.data_type"`)}
+	}
+	if _, ok := fc.mutation.DisplayType(); !ok {
+		return &ValidationError{Name: "display_type", err: errors.New(`ent: missing required field "Feed.display_type"`)}
 	}
 	if _, ok := fc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Feed.created_at"`)}
@@ -191,6 +233,22 @@ func (fc *FeedCreate) createSpec() (*Feed, *sqlgraph.CreateSpec) {
 			Column: feed.FieldFeedName,
 		})
 		_node.FeedName = value
+	}
+	if value, ok := fc.mutation.DataType(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint16,
+			Value:  value,
+			Column: feed.FieldDataType,
+		})
+		_node.DataType = value
+	}
+	if value, ok := fc.mutation.DisplayType(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint16,
+			Value:  value,
+			Column: feed.FieldDisplayType,
+		})
+		_node.DisplayType = value
 	}
 	if value, ok := fc.mutation.CreatedAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

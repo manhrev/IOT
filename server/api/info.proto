@@ -24,6 +24,19 @@ service Info {
     rpc ListData(ListDataRequest) returns (ListDataReply);
 }
 
+enum FeedDisplayType {
+    FEED_TYPE_UNSPECIFIED = 0;
+    FEED_TYPE_SWITCH = 1;
+    FEED_TYPE_GRAPTH = 2;
+    FEED_TYPE_VALUE = 3;
+}
+
+enum FeedDataType {
+    FEED_DATA_TYPE_UNSPECIFIED = 0;
+    FEED_DATA_TYPE_BOOL = 1; // when get data, 0 equal false, others equal true
+    FEED_DATA_TYPE_NUMBER = 2;
+}
+
 message CreateGroupRequest {
     string group_name = 1;
 }
@@ -51,12 +64,16 @@ message DeleteGroupReply {}
 
 message CreateFeedRequest {
     string feed_name = 2;
+    FeedDisplayType display_type = 1;
+    FeedDataType data_type = 3;
 }
 
 message CreateFeedReply {}
 
 message FeedInfo {
     int64 feed_id = 1;
+    FeedDisplayType display_type = 4;
+    FeedDataType data_type = 5;
     string feed_name = 2;
     google.protobuf.Timestamp created_at = 3;
 }

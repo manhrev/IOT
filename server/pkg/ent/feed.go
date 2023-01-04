@@ -18,6 +18,10 @@ type Feed struct {
 	ID int `json:"id,omitempty"`
 	// FeedName holds the value of the "feed_name" field.
 	FeedName string `json:"feed_name,omitempty"`
+	// DataType holds the value of the "data_type" field.
+	DataType uint16 `json:"data_type,omitempty"`
+	// DisplayType holds the value of the "display_type" field.
+	DisplayType uint16 `json:"display_type,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -59,7 +63,7 @@ func (*Feed) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case feed.FieldID:
+		case feed.FieldID, feed.FieldDataType, feed.FieldDisplayType:
 			values[i] = new(sql.NullInt64)
 		case feed.FieldFeedName:
 			values[i] = new(sql.NullString)
@@ -91,6 +95,18 @@ func (f *Feed) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field feed_name", values[i])
 			} else if value.Valid {
 				f.FeedName = value.String
+			}
+		case feed.FieldDataType:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field data_type", values[i])
+			} else if value.Valid {
+				f.DataType = uint16(value.Int64)
+			}
+		case feed.FieldDisplayType:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field display_type", values[i])
+			} else if value.Valid {
+				f.DisplayType = uint16(value.Int64)
 			}
 		case feed.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -138,6 +154,10 @@ func (f *Feed) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", f.ID))
 	builder.WriteString(", feed_name=")
 	builder.WriteString(f.FeedName)
+	builder.WriteString(", data_type=")
+	builder.WriteString(fmt.Sprintf("%v", f.DataType))
+	builder.WriteString(", display_type=")
+	builder.WriteString(fmt.Sprintf("%v", f.DisplayType))
 	builder.WriteString(", created_at=")
 	builder.WriteString(f.CreatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')

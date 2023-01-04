@@ -33,6 +33,8 @@ var (
 	FeedsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "feed_name", Type: field.TypeString, Unique: true},
+		{Name: "data_type", Type: field.TypeUint16, Default: 0},
+		{Name: "display_type", Type: field.TypeUint16, Default: 0},
 		{Name: "created_at", Type: field.TypeTime},
 	}
 	// FeedsTable holds the schema information for the "feeds" table.

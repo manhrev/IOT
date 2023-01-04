@@ -504,21 +504,25 @@ func (m *DataMutation) ResetEdge(name string) error {
 // FeedMutation represents an operation that mutates the Feed nodes in the graph.
 type FeedMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	feed_name     *string
-	created_at    *time.Time
-	clearedFields map[string]struct{}
-	data          map[int]struct{}
-	removeddata   map[int]struct{}
-	cleareddata   bool
-	group         map[int]struct{}
-	removedgroup  map[int]struct{}
-	clearedgroup  bool
-	done          bool
-	oldValue      func(context.Context) (*Feed, error)
-	predicates    []predicate.Feed
+	op              Op
+	typ             string
+	id              *int
+	feed_name       *string
+	data_type       *uint16
+	adddata_type    *int16
+	display_type    *uint16
+	adddisplay_type *int16
+	created_at      *time.Time
+	clearedFields   map[string]struct{}
+	data            map[int]struct{}
+	removeddata     map[int]struct{}
+	cleareddata     bool
+	group           map[int]struct{}
+	removedgroup    map[int]struct{}
+	clearedgroup    bool
+	done            bool
+	oldValue        func(context.Context) (*Feed, error)
+	predicates      []predicate.Feed
 }
 
 var _ ent.Mutation = (*FeedMutation)(nil)
@@ -653,6 +657,118 @@ func (m *FeedMutation) OldFeedName(ctx context.Context) (v string, err error) {
 // ResetFeedName resets all changes to the "feed_name" field.
 func (m *FeedMutation) ResetFeedName() {
 	m.feed_name = nil
+}
+
+// SetDataType sets the "data_type" field.
+func (m *FeedMutation) SetDataType(u uint16) {
+	m.data_type = &u
+	m.adddata_type = nil
+}
+
+// DataType returns the value of the "data_type" field in the mutation.
+func (m *FeedMutation) DataType() (r uint16, exists bool) {
+	v := m.data_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDataType returns the old "data_type" field's value of the Feed entity.
+// If the Feed object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FeedMutation) OldDataType(ctx context.Context) (v uint16, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDataType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDataType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDataType: %w", err)
+	}
+	return oldValue.DataType, nil
+}
+
+// AddDataType adds u to the "data_type" field.
+func (m *FeedMutation) AddDataType(u int16) {
+	if m.adddata_type != nil {
+		*m.adddata_type += u
+	} else {
+		m.adddata_type = &u
+	}
+}
+
+// AddedDataType returns the value that was added to the "data_type" field in this mutation.
+func (m *FeedMutation) AddedDataType() (r int16, exists bool) {
+	v := m.adddata_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetDataType resets all changes to the "data_type" field.
+func (m *FeedMutation) ResetDataType() {
+	m.data_type = nil
+	m.adddata_type = nil
+}
+
+// SetDisplayType sets the "display_type" field.
+func (m *FeedMutation) SetDisplayType(u uint16) {
+	m.display_type = &u
+	m.adddisplay_type = nil
+}
+
+// DisplayType returns the value of the "display_type" field in the mutation.
+func (m *FeedMutation) DisplayType() (r uint16, exists bool) {
+	v := m.display_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayType returns the old "display_type" field's value of the Feed entity.
+// If the Feed object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FeedMutation) OldDisplayType(ctx context.Context) (v uint16, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayType: %w", err)
+	}
+	return oldValue.DisplayType, nil
+}
+
+// AddDisplayType adds u to the "display_type" field.
+func (m *FeedMutation) AddDisplayType(u int16) {
+	if m.adddisplay_type != nil {
+		*m.adddisplay_type += u
+	} else {
+		m.adddisplay_type = &u
+	}
+}
+
+// AddedDisplayType returns the value that was added to the "display_type" field in this mutation.
+func (m *FeedMutation) AddedDisplayType() (r int16, exists bool) {
+	v := m.adddisplay_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetDisplayType resets all changes to the "display_type" field.
+func (m *FeedMutation) ResetDisplayType() {
+	m.display_type = nil
+	m.adddisplay_type = nil
 }
 
 // SetCreatedAt sets the "created_at" field.
@@ -818,9 +934,15 @@ func (m *FeedMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *FeedMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 4)
 	if m.feed_name != nil {
 		fields = append(fields, feed.FieldFeedName)
+	}
+	if m.data_type != nil {
+		fields = append(fields, feed.FieldDataType)
+	}
+	if m.display_type != nil {
+		fields = append(fields, feed.FieldDisplayType)
 	}
 	if m.created_at != nil {
 		fields = append(fields, feed.FieldCreatedAt)
@@ -835,6 +957,10 @@ func (m *FeedMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case feed.FieldFeedName:
 		return m.FeedName()
+	case feed.FieldDataType:
+		return m.DataType()
+	case feed.FieldDisplayType:
+		return m.DisplayType()
 	case feed.FieldCreatedAt:
 		return m.CreatedAt()
 	}
@@ -848,6 +974,10 @@ func (m *FeedMutation) OldField(ctx context.Context, name string) (ent.Value, er
 	switch name {
 	case feed.FieldFeedName:
 		return m.OldFeedName(ctx)
+	case feed.FieldDataType:
+		return m.OldDataType(ctx)
+	case feed.FieldDisplayType:
+		return m.OldDisplayType(ctx)
 	case feed.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	}
@@ -866,6 +996,20 @@ func (m *FeedMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetFeedName(v)
 		return nil
+	case feed.FieldDataType:
+		v, ok := value.(uint16)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDataType(v)
+		return nil
+	case feed.FieldDisplayType:
+		v, ok := value.(uint16)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayType(v)
+		return nil
 	case feed.FieldCreatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -880,13 +1024,26 @@ func (m *FeedMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *FeedMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.adddata_type != nil {
+		fields = append(fields, feed.FieldDataType)
+	}
+	if m.adddisplay_type != nil {
+		fields = append(fields, feed.FieldDisplayType)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *FeedMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case feed.FieldDataType:
+		return m.AddedDataType()
+	case feed.FieldDisplayType:
+		return m.AddedDisplayType()
+	}
 	return nil, false
 }
 
@@ -895,6 +1052,20 @@ func (m *FeedMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *FeedMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case feed.FieldDataType:
+		v, ok := value.(int16)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDataType(v)
+		return nil
+	case feed.FieldDisplayType:
+		v, ok := value.(int16)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDisplayType(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Feed numeric field %s", name)
 }
@@ -924,6 +1095,12 @@ func (m *FeedMutation) ResetField(name string) error {
 	switch name {
 	case feed.FieldFeedName:
 		m.ResetFeedName()
+		return nil
+	case feed.FieldDataType:
+		m.ResetDataType()
+		return nil
+	case feed.FieldDisplayType:
+		m.ResetDisplayType()
 		return nil
 	case feed.FieldCreatedAt:
 		m.ResetCreatedAt()

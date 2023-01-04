@@ -100,6 +100,20 @@ func FeedName(v string) predicate.Feed {
 	})
 }
 
+// DataType applies equality check predicate on the "data_type" field. It's identical to DataTypeEQ.
+func DataType(v uint16) predicate.Feed {
+	return predicate.Feed(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldDataType), v))
+	})
+}
+
+// DisplayType applies equality check predicate on the "display_type" field. It's identical to DisplayTypeEQ.
+func DisplayType(v uint16) predicate.Feed {
+	return predicate.Feed(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldDisplayType), v))
+	})
+}
+
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
 func CreatedAt(v time.Time) predicate.Feed {
 	return predicate.Feed(func(s *sql.Selector) {
@@ -215,6 +229,158 @@ func FeedNameEqualFold(v string) predicate.Feed {
 func FeedNameContainsFold(v string) predicate.Feed {
 	return predicate.Feed(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldFeedName), v))
+	})
+}
+
+// DataTypeEQ applies the EQ predicate on the "data_type" field.
+func DataTypeEQ(v uint16) predicate.Feed {
+	return predicate.Feed(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldDataType), v))
+	})
+}
+
+// DataTypeNEQ applies the NEQ predicate on the "data_type" field.
+func DataTypeNEQ(v uint16) predicate.Feed {
+	return predicate.Feed(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldDataType), v))
+	})
+}
+
+// DataTypeIn applies the In predicate on the "data_type" field.
+func DataTypeIn(vs ...uint16) predicate.Feed {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Feed(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldDataType), v...))
+	})
+}
+
+// DataTypeNotIn applies the NotIn predicate on the "data_type" field.
+func DataTypeNotIn(vs ...uint16) predicate.Feed {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Feed(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldDataType), v...))
+	})
+}
+
+// DataTypeGT applies the GT predicate on the "data_type" field.
+func DataTypeGT(v uint16) predicate.Feed {
+	return predicate.Feed(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldDataType), v))
+	})
+}
+
+// DataTypeGTE applies the GTE predicate on the "data_type" field.
+func DataTypeGTE(v uint16) predicate.Feed {
+	return predicate.Feed(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldDataType), v))
+	})
+}
+
+// DataTypeLT applies the LT predicate on the "data_type" field.
+func DataTypeLT(v uint16) predicate.Feed {
+	return predicate.Feed(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldDataType), v))
+	})
+}
+
+// DataTypeLTE applies the LTE predicate on the "data_type" field.
+func DataTypeLTE(v uint16) predicate.Feed {
+	return predicate.Feed(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldDataType), v))
+	})
+}
+
+// DisplayTypeEQ applies the EQ predicate on the "display_type" field.
+func DisplayTypeEQ(v uint16) predicate.Feed {
+	return predicate.Feed(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldDisplayType), v))
+	})
+}
+
+// DisplayTypeNEQ applies the NEQ predicate on the "display_type" field.
+func DisplayTypeNEQ(v uint16) predicate.Feed {
+	return predicate.Feed(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldDisplayType), v))
+	})
+}
+
+// DisplayTypeIn applies the In predicate on the "display_type" field.
+func DisplayTypeIn(vs ...uint16) predicate.Feed {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Feed(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldDisplayType), v...))
+	})
+}
+
+// DisplayTypeNotIn applies the NotIn predicate on the "display_type" field.
+func DisplayTypeNotIn(vs ...uint16) predicate.Feed {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Feed(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldDisplayType), v...))
+	})
+}
+
+// DisplayTypeGT applies the GT predicate on the "display_type" field.
+func DisplayTypeGT(v uint16) predicate.Feed {
+	return predicate.Feed(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldDisplayType), v))
+	})
+}
+
+// DisplayTypeGTE applies the GTE predicate on the "display_type" field.
+func DisplayTypeGTE(v uint16) predicate.Feed {
+	return predicate.Feed(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldDisplayType), v))
+	})
+}
+
+// DisplayTypeLT applies the LT predicate on the "display_type" field.
+func DisplayTypeLT(v uint16) predicate.Feed {
+	return predicate.Feed(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldDisplayType), v))
+	})
+}
+
+// DisplayTypeLTE applies the LTE predicate on the "display_type" field.
+func DisplayTypeLTE(v uint16) predicate.Feed {
+	return predicate.Feed(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldDisplayType), v))
 	})
 }
 

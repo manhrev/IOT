@@ -5,13 +5,14 @@ import (
 	"errors"
 	"time"
 
+	info_pb "github.com/manhrev/IOT/server/pkg/api"
 	"github.com/manhrev/IOT/server/pkg/ent"
 	"github.com/manhrev/IOT/server/pkg/ent/data"
 	"github.com/manhrev/IOT/server/pkg/ent/feed"
 )
 
 type Feed interface {
-	Create(ctx context.Context, feedName string) error
+	Create(ctx context.Context, feedName string, dataType info_pb.FeedDataType, displayType info_pb.FeedDisplayType) error
 	Get(ctx context.Context, feedName string) (*ent.Feed, error)
 	List(ctx context.Context) ([]*ent.Feed, error)
 	Delete(ctx context.Context, feedName string) error
@@ -27,8 +28,12 @@ func New(entClient *ent.Client) Feed {
 	}
 }
 
-func (f *feedImpl) Create(ctx context.Context, feedName string) error {
-	_, err := f.entClient.Feed.Create().SetFeedName(feedName).SetCreatedAt(time.Now()).Save(ctx)
+func (f *feedImpl) Create(ctx context.Context, feedName string, dataType info_pb.FeedDataType, displayType info_pb.FeedDisplayType) error {
+	_, err := f.entClient.Feed.Create().
+		SetFeedName(feedName).
+		SetDataType(uint16(dataType)).
+		SetDisplayType(uint16(displayType)).
+		SetCreatedAt(time.Now()).Save(ctx)
 	if err != nil {
 		return err
 	}

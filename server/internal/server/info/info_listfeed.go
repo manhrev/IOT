@@ -23,9 +23,11 @@ func convertListEntFeedInfoToFeedInfo(entFeedList []*ent.Feed) []*info_pb.FeedIn
 	listFeedInfo := []*info_pb.FeedInfo{}
 	for _, entFeed := range entFeedList {
 		feedInfo := &info_pb.FeedInfo{
-			FeedId:    int64(entFeed.ID),
-			FeedName:  entFeed.FeedName,
-			CreatedAt: timestamppb.New(entFeed.CreatedAt),
+			FeedId:      int64(entFeed.ID),
+			FeedName:    entFeed.FeedName,
+			CreatedAt:   timestamppb.New(entFeed.CreatedAt),
+			DisplayType: info_pb.FeedDisplayType(entFeed.DisplayType),
+			DataType:    info_pb.FeedDataType(entFeed.DataType),
 		}
 		listFeedInfo = append(listFeedInfo, feedInfo)
 	}

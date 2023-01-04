@@ -23,8 +23,16 @@ func init() {
 	data.DefaultRecordedAt = dataDescRecordedAt.Default.(time.Time)
 	feedFields := schema.Feed{}.Fields()
 	_ = feedFields
+	// feedDescDataType is the schema descriptor for data_type field.
+	feedDescDataType := feedFields[1].Descriptor()
+	// feed.DefaultDataType holds the default value on creation for the data_type field.
+	feed.DefaultDataType = feedDescDataType.Default.(uint16)
+	// feedDescDisplayType is the schema descriptor for display_type field.
+	feedDescDisplayType := feedFields[2].Descriptor()
+	// feed.DefaultDisplayType holds the default value on creation for the display_type field.
+	feed.DefaultDisplayType = feedDescDisplayType.Default.(uint16)
 	// feedDescCreatedAt is the schema descriptor for created_at field.
-	feedDescCreatedAt := feedFields[1].Descriptor()
+	feedDescCreatedAt := feedFields[3].Descriptor()
 	// feed.DefaultCreatedAt holds the default value on creation for the created_at field.
 	feed.DefaultCreatedAt = feedDescCreatedAt.Default.(time.Time)
 	groupFields := schema.Group{}.Fields()

@@ -36,6 +36,48 @@ func (fu *FeedUpdate) SetFeedName(s string) *FeedUpdate {
 	return fu
 }
 
+// SetDataType sets the "data_type" field.
+func (fu *FeedUpdate) SetDataType(u uint16) *FeedUpdate {
+	fu.mutation.ResetDataType()
+	fu.mutation.SetDataType(u)
+	return fu
+}
+
+// SetNillableDataType sets the "data_type" field if the given value is not nil.
+func (fu *FeedUpdate) SetNillableDataType(u *uint16) *FeedUpdate {
+	if u != nil {
+		fu.SetDataType(*u)
+	}
+	return fu
+}
+
+// AddDataType adds u to the "data_type" field.
+func (fu *FeedUpdate) AddDataType(u int16) *FeedUpdate {
+	fu.mutation.AddDataType(u)
+	return fu
+}
+
+// SetDisplayType sets the "display_type" field.
+func (fu *FeedUpdate) SetDisplayType(u uint16) *FeedUpdate {
+	fu.mutation.ResetDisplayType()
+	fu.mutation.SetDisplayType(u)
+	return fu
+}
+
+// SetNillableDisplayType sets the "display_type" field if the given value is not nil.
+func (fu *FeedUpdate) SetNillableDisplayType(u *uint16) *FeedUpdate {
+	if u != nil {
+		fu.SetDisplayType(*u)
+	}
+	return fu
+}
+
+// AddDisplayType adds u to the "display_type" field.
+func (fu *FeedUpdate) AddDisplayType(u int16) *FeedUpdate {
+	fu.mutation.AddDisplayType(u)
+	return fu
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (fu *FeedUpdate) SetCreatedAt(t time.Time) *FeedUpdate {
 	fu.mutation.SetCreatedAt(t)
@@ -206,6 +248,34 @@ func (fu *FeedUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: feed.FieldFeedName,
 		})
 	}
+	if value, ok := fu.mutation.DataType(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint16,
+			Value:  value,
+			Column: feed.FieldDataType,
+		})
+	}
+	if value, ok := fu.mutation.AddedDataType(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint16,
+			Value:  value,
+			Column: feed.FieldDataType,
+		})
+	}
+	if value, ok := fu.mutation.DisplayType(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint16,
+			Value:  value,
+			Column: feed.FieldDisplayType,
+		})
+	}
+	if value, ok := fu.mutation.AddedDisplayType(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint16,
+			Value:  value,
+			Column: feed.FieldDisplayType,
+		})
+	}
 	if value, ok := fu.mutation.CreatedAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
@@ -343,6 +413,48 @@ type FeedUpdateOne struct {
 // SetFeedName sets the "feed_name" field.
 func (fuo *FeedUpdateOne) SetFeedName(s string) *FeedUpdateOne {
 	fuo.mutation.SetFeedName(s)
+	return fuo
+}
+
+// SetDataType sets the "data_type" field.
+func (fuo *FeedUpdateOne) SetDataType(u uint16) *FeedUpdateOne {
+	fuo.mutation.ResetDataType()
+	fuo.mutation.SetDataType(u)
+	return fuo
+}
+
+// SetNillableDataType sets the "data_type" field if the given value is not nil.
+func (fuo *FeedUpdateOne) SetNillableDataType(u *uint16) *FeedUpdateOne {
+	if u != nil {
+		fuo.SetDataType(*u)
+	}
+	return fuo
+}
+
+// AddDataType adds u to the "data_type" field.
+func (fuo *FeedUpdateOne) AddDataType(u int16) *FeedUpdateOne {
+	fuo.mutation.AddDataType(u)
+	return fuo
+}
+
+// SetDisplayType sets the "display_type" field.
+func (fuo *FeedUpdateOne) SetDisplayType(u uint16) *FeedUpdateOne {
+	fuo.mutation.ResetDisplayType()
+	fuo.mutation.SetDisplayType(u)
+	return fuo
+}
+
+// SetNillableDisplayType sets the "display_type" field if the given value is not nil.
+func (fuo *FeedUpdateOne) SetNillableDisplayType(u *uint16) *FeedUpdateOne {
+	if u != nil {
+		fuo.SetDisplayType(*u)
+	}
+	return fuo
+}
+
+// AddDisplayType adds u to the "display_type" field.
+func (fuo *FeedUpdateOne) AddDisplayType(u int16) *FeedUpdateOne {
+	fuo.mutation.AddDisplayType(u)
 	return fuo
 }
 
@@ -538,6 +650,34 @@ func (fuo *FeedUpdateOne) sqlSave(ctx context.Context) (_node *Feed, err error) 
 			Type:   field.TypeString,
 			Value:  value,
 			Column: feed.FieldFeedName,
+		})
+	}
+	if value, ok := fuo.mutation.DataType(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint16,
+			Value:  value,
+			Column: feed.FieldDataType,
+		})
+	}
+	if value, ok := fuo.mutation.AddedDataType(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint16,
+			Value:  value,
+			Column: feed.FieldDataType,
+		})
+	}
+	if value, ok := fuo.mutation.DisplayType(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint16,
+			Value:  value,
+			Column: feed.FieldDisplayType,
+		})
+	}
+	if value, ok := fuo.mutation.AddedDisplayType(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint16,
+			Value:  value,
+			Column: feed.FieldDisplayType,
 		})
 	}
 	if value, ok := fuo.mutation.CreatedAt(); ok {

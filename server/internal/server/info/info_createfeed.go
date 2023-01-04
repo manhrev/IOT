@@ -7,7 +7,7 @@ import (
 )
 
 func (s *infoServer) CreateFeed(ctx context.Context, request *info_pb.CreateFeedRequest) (*info_pb.CreateFeedReply, error) {
-	err := s.repository.Feed.Create(ctx, request.GetFeedName())
+	err := s.repository.Feed.Create(ctx, request.GetFeedName(), request.GetDataType(), request.GetDisplayType())
 	if token := s.mqttClient.Subscribe(request.GetFeedName(), 0, nil); token.Wait() && token.Error() != nil {
 		return nil, token.Error()
 	}
