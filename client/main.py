@@ -40,6 +40,7 @@ client.on_connect = connected
 client.on_disconnect = disconnected
 client.on_message = message
 client.on_subscribe = subscribe
+client.username_pw_set("admin", "admin")
 client.connect(broker_address, 1883) # connect to broker
 client.loop_forever()
 
